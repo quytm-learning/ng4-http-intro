@@ -9,7 +9,7 @@ Trước khi đi vào chi tiết, cần nhớ rằng ta có 2 module làm việc
 đó là Http module và HttpClient module. Từ angular 4.3 HttpClient modudle được bổ sung 
 cung cấp thêm nhiều tính năng hơn (progress events, json deserialization by default, Interceptors 
 và nhiều tính năng hay ho hơn) tham khảo thêm trên https://angular.io/guide/http. 
-Còn Http module chỉ là API cũ và đã bị đánh dấu deprecated
+Còn Http module chỉ là API cũ và đã bị đánh dấu deprecated (ở version 5)
 
 Sẽ sử dụng HttpClient modudle trong các dự án Angular 4 và 4+
 
@@ -340,6 +340,31 @@ chứ không đề cập tới chi tiết)*
 
 HttpClient support cho việc mock test khá là tiện dụng.
 
+## Bonus: HttpClient vs Http
+
+Phần này bonus thêm, đối với những người đã từng sử dụng Angular ở những version khác thì Http khá là quen thuộc
+Tuy nhiên, như đã đề cập ở trước đó, Http đã bị đánh dấu deprecated
+Ta sẽ có 1 chút so sánh, cũng như kết luận lại sự khác nhau giữa 2 thằng
+
+[Tham khảo thêm](https://sergeome.com/blog/2017/11/26/simply-about-new-httpclient-in-angular/)
+
+### New features
+
+- Automatic conversion to from JSON to an object
+- Response type definition
+- Event firing
+- Simplified syntax for headers
+- Interceptors
+
+### Migrate từ Http sang HttpClient trong application sử dụng version cũ
+
+- Đầu tiên là cần đảm bảo rằng version của ta phải là 4.3 hoặc lớn hơn
+- Trong Module cần replace `HttpModule` bằng `HttpClientModule`, cùng với đó là import đúng
+gói `@angular/common/http`
+- Tiếp theo là tới các service trong ứng dụng, replace `Http` bằng `HttpClient`
+
+Đó là các bước cần thiết, required để thực hiện việc chuyển đổi, ngoài ra ta có thể thay đổi:
+- Nếu set custom headers, ta nên viết lại chúng theo cú pháp mà HttpClient support (ở trên)
 
 ## Tài liệu tham khảo 
 
