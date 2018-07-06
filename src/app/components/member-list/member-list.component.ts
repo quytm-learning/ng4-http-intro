@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 // import 'rxjs/add/operator/retry';
 
 @Component({
@@ -58,6 +58,29 @@ export class MemberListComponent implements OnInit {
       .subscribe(data => console.log(data));
   }
 
+  makeRequest5(): void {
+    const body = {
+      productId: '123',
+      productName: 'Laptop'
+    };
+
+    this.http
+      .post('/api/items/add', body, {
+        headers: new HttpHeaders().set('Authorization', 'my-auth-token'),
+      })
+      .subscribe();
+
+  }
+
+  makeRequest6(): void {
+
+    this.http
+      .get('/api/items/add', {
+        params: new HttpParams().set('productId', '123'),
+      })
+      .subscribe();
+
+  }
 
 }
 
