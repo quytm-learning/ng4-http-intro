@@ -290,6 +290,16 @@ export class NoopInterceptor implements HttpInterceptor {
 , cần nhớ rằng `intercept(...)` luôn phải `return next.handle(req);` để đảm bảo
 luồng hoạt động sẽ tiếp tục chạy. Pattern này khá giống với middleware trong Nodejs.
 
+Thông thường, interceptor bắt request, thay đổi 1 chút ở chúng, sau đó 
+`next` (đối tượng `HttpHandler`) làm nhiệm vụ transform request đó
+vào trong một Observable rồi đưa tới interceptor tiếp theo trong chain
+, nếu interceptor này là cuối cùng rồi thì request sẽ tới server
+
+*Note*: 
+- HTTP_INTERCEPTORS: token để đăng kí interceptors
+- multi: true: báo rằng HTTP_INTERCEPTORS là một màng giá trị, chứ 
+không phải là single value.
+
 Tiếp theo, ta cần khai báo nó trong module
 
 ```
@@ -313,6 +323,8 @@ thứ hay ho trong đó:
 - Caching: cache lại các request, response
 - ...
 *(Chi tiết hơn ở trong code demo)*
+
+
 
 ## Security: XSRF Protection
 
