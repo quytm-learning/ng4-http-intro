@@ -7,11 +7,13 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MyInterceptor} from './intercept/my-interceptor';
 import {AuthInterceptor} from './intercept/auth-interceptor';
 import {ResponseInterceptor} from './intercept/response-interceptor';
+import { ObservableDemoComponent } from './components/observable-demo/observable-demo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MemberListComponent,
+    ObservableDemoComponent,
   ],
   imports: [
     BrowserModule,

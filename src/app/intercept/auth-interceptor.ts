@@ -14,6 +14,8 @@ import {Observable} from 'rxjs';
         headers: req.headers.set('Authorization', '_ban_anh_Quy_')
       });
 
+      // req.headers.set('Authorization', '_ban_anh_Quy_');
+
       return next.handle(customReq);
     }
   }

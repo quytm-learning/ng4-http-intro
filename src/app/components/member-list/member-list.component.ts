@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-// import 'rxjs/add/operator/retry';
+import {retry, catchError} from 'rxjs/operators';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-member-list',
@@ -41,13 +42,15 @@ export class MemberListComponent implements OnInit {
       );
   }
 
-  // makeRequest3(): void {
-  //   const url = 'http://jsonplaceholder.typicode.com/posts/1';
-  //   this.http.get<UserItemResponse>(url)
-  //     .retry(3)
-  //     .subscribe(
-  //     );
-  // }
+  makeRequest3(): void {
+    const url = 'http://jsonplaceholder.typicode.com/posts/1';
+    this.http.get<UserItemResponse>(url)
+      .pipe(
+        retry(3)
+      )
+      .subscribe(
+      );
+  }
 
   makeRequest4(): void {
     this.http
