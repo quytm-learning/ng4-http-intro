@@ -382,3 +382,141 @@ gói `@angular/common/http`
 
 - https://v4.angular.io/guide/http (Ng4)
 - https://angular.io/guide/http (latest)
+
+
+***
+
+
+# RxJS: Observables
+
+Chắc hẳn đối với những ai đang sử dụng Angular, đối tượng Observables 
+được sử dụng khá là rộng rãi. Đặc biệt là response trả về của HttpClient.
+
+Observables nằm trong thư viện RxJS, không chỉ có mỗi trong Angular, 
+nó còn hiện hữu ở nhiều framwork khác, nhiều ngôn ngữ khác, 
+nó design theo Observer pattern.
+
+Để hiểu được các tư tưởng này ta sẽ đi lần lượt theo từng phase, hi vọng
+bạn có thể kiên trì follow theo được
+
+*Nội dung được follow theo cuốn **`RxJS in Action`** của Paul P. Daniels*
+
+##  Understanding Stream
+
+Phần tổng quát nhất giúp ta khám phá, tìm hiểu về Stream
+
+Ta sẽ follow theo 3 phần:
+
+- Vấn đề khi làm việc với bất đồng bộ
+- Bắt đầu làm quen với Functional programming làm nền tảng cho reactive programming
+- Làm quen với một số operators trong RxJS
+
+### 1. Thinking Reactively
+
+Trong phần này, ta sẽ đi tìm hiểu những thứ sau:
+
+- Bất đồng bộ trong JS với Callback và Promise
+- Tìm hiểu Stream trong việc mô hình hóa các dữ liệu tĩnh, động và thời gian
+- Sử dụng observable stream để handle unbounded data trong 
+- Thinking về reactive và luồng dữ liệu bất đồng bộ
+
+Start!!!
+
+Việc xử lý các events và data luôn xuất hiện khi ta tạo ra một application.
+Một cách *xưa như Trái đất* mà ta vẫn hay dùng đó là sử dụng Callback, 
+tuy nhiên nó dễ gây thảm họa khi mà business thay đổi, hay việc xử lý logic 
+được thực hiện ở một nơi khác. Ta sẽ tìm hiểu 2 khái niệm chính, đó là 
+Functional programming (FP) và Reactive programming (RF). Đúc kết lại của 2 
+khái niệm đó, ta sẽ có được Reactive functional programming (RFP) được 
+hiện thực hóa trong thư viện RxJS
+
+#### 1.1 Synchronous vs. asynchronous computing
+
+Latency và wait time là 2 thứ mà ta thường nghĩ tới khi mà nói về vấn đề
+đồng bộ, bất đồng bộ.
+
+##### 1.1.1 Vấn đề đối với block code
+
+Đa phần code của chúng ta được thiết kế theo kiểu block code, nó có lợi ích
+là code chạy tuần tự, dễ dàng debug. Tuy nhiên, nhược điểm mà ai cũng
+có thể nhận ra, đó là khi mà có 2 tác vụ cần thực hiện, tác vụ sau không
+có phụ thuộc gì với tác vụ trước, thì nó vẫn phải chờ cho tới khi tác vụ 
+thứ nhất thực hiện xong, điều này càng kinh khủng hơn khi mà thời gian xử 
+lý tác vụ 1 là rất lâu.
+
+##### 1.1.2 Non-blocking code with callback functions
+
+Khác với kiểu code ở trên, callback được sử dụng để khắc phục vấn đề của 
+code block, nó xử lý bất đồng bộ. Tác vụ sẽ được xử lý ở một luồng khác,
+do đó luồng chính vẫn chạy bình thường, không bị block, khi mà tác vụ 
+được hoàn thành thì callback trả về giúp ta control.
+
+
+
+#### 1.2 Better callbacks with Promises
+
+Promise không nằm trong RxJS, nhưng ta vẫn đề cập tới nó vì nó 
+làm việc rất tốt cùng với RxJS. Js hỗ trợ Promise từ CS6, với 
+Promise ta có thể thực hiện một loạt các action theo một thứ tự
+cụ thể, tránh tình trạng callback-hell
+
+Hạn chế của Promise là nó không thể handle được các datasource 
+trả về nhiều hơn 1 giá trị, giống như là kết quả của việc di chuyển
+chuột hay là chuỗi bytes trong 1 file stream, khả năng retry nếu 
+thất bại và hủy bỏ action.
+
+
+----------------- Draft: Start ---------------------------
+
+RxJS cung cấp giải pháp combine giữa khả năng decouple functionality
+của Event Emitters với mẫu thiết kế của Promise. Hơn nữa, 
+cần phải làm việc với cả đồng bộ và bất đồng bộ, xử lý lỗi, mở 
+rộng với nhiều events/
+
+Stream: thông thường ta coi stream như một đối tượng trừu tượng
+liên quan tới các thao tác IO như read file, sockets, request 
+server. Trong RP, ta mở rộng khái niệm đó ra, ta coi stream là 
+tất cả những data nào mà nó có thể được consumer
+
+Các thành phần của Rx stream: 
+- Producers: là nguồn của dữ liệu, bắt buộc phải có để cung cấp
+dữ liệu, phát ra các events, hay push notifications. 
+Trong Observer pattern thì nó là Subject, 
+trong RxJS thì nó là Observables
+- Consumers: là đối tượng nhận các event từ Producers, 
+trong RxJS thì nó là Observer. Streams chỉ đi 1 chiều từ producer
+tới consumer
+- Data pipeline: đây là lợi thế của RxJS, ta có thể điều khiển
+và chỉnh sửa dữ liệu được truyền giữa 2 thằng sao cho phù hợp
+với expect của consumer
+- Time: thời gian bắt đầu gửi event cho tới khi consumer nhận
+được event
+
+```
+Stream.timerInSeconds()
+ .interval()
+ .map(x => x.value)
+ .filter(x => x % 2 === 0)
+ .take(10)
+ .subscribe(val=> console.log(val));
+
+```
+
+Tổng kết lại chương 1:
+
+- Asynchronous code can be very difficult to implement because existing programming
+patterns don’t scale to complex behavior.
+- Callbacks and Promises can be used to deal with asynchronous code, but they
+have many limitations when targeted against large streams generated from
+repeated button clicks or mouse movements.
+- RxJS is a reactive solution that can more concisely and declaratively deal with
+large amounts of data separated over time.
+- RxJS is a paradigm shift that requires seeing and understanding data in streams
+with propagation of change.
+- Streams originate from a producer (observable), where data flows through a
+pipeline, arriving at a consumer (observer). This same programming model is
+used whether or not data is separated by time. 
+
+----------- Draft: end -----------------------------
+
+***(To be continue ...)***
