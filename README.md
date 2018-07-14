@@ -4,6 +4,7 @@
 
 [Observables trong RxJS](https://github.com/quytm-learning/ng4-http-intro#rxjs-observables)
 
+[Slide](https://docs.google.com/presentation/d/1_46_KOfW3yg-6wne4t90p1hEx5vEWZvlmLMMXEYq4ew/edit?usp=sharing)
 
 # HttpClient - Angular 4 tutorial
 
